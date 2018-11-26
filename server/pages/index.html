@@ -1,0 +1,219 @@
+{% extends '_layouts/base.html' %}
+{% set title = "Build Amazing Native Apps and Progressive Web Apps with Ionic Framework and Angular" %}
+{% set id = "home" %}
+{% set pre_footer = false %}
+{% set meta_description = "Ionic is the app development platform for web developers. Build amazing cross platform mobile, web, and desktop apps all with one shared code base and open web standards" %}
+{% set stickyNav = true %}
+
+{% block main %}
+<div class="banner">
+  <div class="container">
+    <hgroup>
+      <h1>
+        Build amazing apps in one codebase, for any platform, with the web.
+      </h1>
+      <p>
+        Ionic lets web developers build, test, and deploy cross-platform hybrid mobile apps easier than ever.
+      </p>
+      <div class="btns">
+        <a href="/getting-started" class="btn white" id="btn-home-get-started">Get Started</a>
+        <!-- or <a class="text-link" href="/sales" id="btn-home-contact-sales">contact sales</a> -->
+      </div>
+      <div class="target">
+        Target <i></i>
+      </div>
+    </hgroup>
+
+    <div class="graphics">
+      <div class="android">
+        <div class="layer-1"></div>
+        <div class="layer-2"></div>
+      </div>
+      <div class="iphone">
+        <div class="layer-3"></div>
+        <div class="layer-4"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<main>
+  <div class="container">
+    <div class="company">
+      <div class="logos">
+        <div class="logo logo--cat"></div>
+        <div class="logo logo--comcast"></div>
+        <div class="logo logo--ge"></div>
+        <div class="logo logo--ibm"></div>
+        <div class="logo logo--target"></div>
+        <div class="logo logo--mcdonalds"></div>
+        <div class="logo logo--microsoft"></div>
+      </div>
+    </div>
+
+    <ul class="paths">
+      <li class="enterprise">
+        <div class="card-wrapper">
+          <div class="card">
+            <a href="/enterprise" id="btn-home-enterprise-card">
+              <div class="layer-1">
+                <h4>Ionic For <em>Enterprise</em></h4>
+                <h2>The enterprise-ready platform for powerful, secure apps at scale.</h2>
+              </div>
+              <div class="layer-2">
+                <span class="card-link">Learn more</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </li>
+      <li class="teams">
+        <div class="card-wrapper">
+          <div class="card">
+            <a href="/pro/teams" id="btn-home-teams-card">
+              <div class="layer-1">
+                <h4>Ionic for <em>Teams</em></h4>
+                <h2>Boost your team’s workflow with mobile DevOps tools.</h2>
+              </div>
+              <div class="layer-2">
+                <span class="card-link">Get started</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </li>
+      <li class="startups">
+        <div class="card-wrapper">
+          <div class="card">
+            <a href="/startups" id="btn-home-startups-card">
+              <div class="layer-1">
+                <h4>Ionic for <em>Startups</em></h4>
+                <h2>Get up and running with the Ionic open source framework.</h2>
+              </div>
+              <div class="layer-2">
+                <span class="card-link">Get started</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </li>
+    </ul>
+
+
+  </div>
+    {% include '_includes/promos/hybrid-vs-native.html' %}
+  <div class="container">
+    <div class="newsletter">
+      <hgroup>
+        <h3>Start building better apps today.</h3>
+        <p>
+          Sign up for <a href="/pro">Ionic Pro</a> to get an access to the
+          full Ionic experience.
+        </p>
+      </hgroup>
+      <form action="https://dashboard.ionicframework.com/signup?source=framework-{{id}}"
+            method="get"
+            id="form-home-get-started-now">
+        <input type="text" name="email" placeholder="Your email address">
+        <ionic-button type="submit">Get started now</ionic-button>
+      </form>
+    </div>
+  </div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script>
+
+// paralax effect
+var $banner = document.querySelector('.banner')
+window.addEventListener('scroll', function(e) {
+  $banner.style.transform = 'matrix(1, 0, 0, 1, 0, '+ (window.scrollY/5)+')';
+})
+
+// apple tv style card tilt
+var tilt = {
+  init: function() {
+    this.draw = this.draw.bind(this);
+    this.activateElement = this.activateElement.bind(this);
+    this.queueDraw = this.queueDraw.bind(this);
+    this.letGo = this.letGo.bind(this);
+
+    const $card = document.querySelector('.paths li:first-child .card');
+    this.halfW = $card.clientWidth / 2;
+    this.halfH = $card.clientHeight / 2;
+    this.$cards = Array.prototype.slice.call(document.querySelectorAll('.paths .card'));
+    this.$container = document.querySelector('.paths');
+    this.bannerHeight = $banner.offsetHeight;
+    this.event = {};
+
+    this.$cards.forEach(function(el) {
+      // set listeners for each card
+      el.addEventListener('mouseenter', this.activateElement)
+      el.addEventListener('mousemove', this.queueDraw)
+      el.addEventListener('mouseleave', this.letGo.bind(this))
+    }, this)
+    this.$container.addEventListener('mouseleave',this.letGo.bind(this))
+
+    return this;
+  },
+
+  activateElement: function(event) {
+    this.$el = event.target;
+    this.$layer1 = event.target.querySelector('.layer-1');
+    this.$layer2 = event.target.querySelector('.layer-2');
+    this.$li = this.$el.parentElement.parentElement;
+    this.offsetLeft = this.$li.offsetLeft;
+    this.offsetTop = this.$li.offsetTop + this.bannerHeight;
+    this.coorX = this.coorY = 0;
+    this.queued = false;
+    // console.log(this.offsetTop,this.$li.offsetTop, this.bannerHeight);
+  },
+
+  queueDraw: function(event) {
+    if(event.pageX === this.event.pageX && event.pageX === this.event.pageX) {
+      return;
+    }
+
+    if (!this.queued) {
+      this.event = event;
+      this.queued = true;
+      requestAnimationFrame(this.draw)
+      // this.draw()
+    }
+  },
+
+  letGo: function() {
+    this.queued = true;
+    this.$el.style['transform'] =
+    this.$layer1.style['transform'] =
+    this.$layer2.style['transform'] = '';
+  },
+
+  draw: function() {
+
+    var Y = ( Math.round(( this.halfH - (this.event.pageY - this.offsetTop))
+      / this.halfH * 50 ) / 100);
+    var X = ( Math.round((this.halfW - (this.event.pageX - this.offsetLeft))
+      / this.halfW * -50) / 100);
+
+    this.$el.style['transform'] =
+      'rotateX(' + (Y * -1) + 'deg) rotateY(' + (X * -1) + 'deg)';
+    this.$layer1.style['transform'] = function() {
+      let transform = 'translate3d(' + (X * -1) + 'px, ' + (Y * 1) + 'px, 12px)';
+      transform += ' rotateX(' + (Y * -.25) + 'deg) rotateY(' + (X * -.25) + 'deg)';
+      return transform;
+    }();
+    this.$layer2.style['transform'] = function() {
+      let transform = 'translate3d(' + (X * -.5) + 'px, ' + (Y * .5) + 'px, 25px)';
+      transform += ' rotateX(' + (Y * -.25) + 'deg) rotateY(' + (X * -.25) + 'deg)';
+      return transform;
+    }();
+    this.queued = false;
+  }
+}
+
+tilt.init();
+
+
+</script>
+{% endblock %}
